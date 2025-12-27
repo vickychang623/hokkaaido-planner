@@ -1,0 +1,165 @@
+{\rtf1\ansi\ansicpg950\cocoartf2761
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 <!DOCTYPE html>\
+<html lang="zh-TW">\
+<head>\
+    <meta charset="UTF-8">\
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">\
+    <title>\uc0\u20185 \u21488 x\u21271 \u28023 \u36947 \u20908 \u20043 \u26053 </title>\
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>\
+    <script src="https://cdn.tailwindcss.com"></script>\
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">\
+    <style>\
+        body \{ background-color: #f3f4f6; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; \}\
+        .safe-area-bottom \{ padding-bottom: env(safe-area-inset-bottom); \}\
+        .glass-nav \{ background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); \}\
+        .day-card \{ transition: transform 0.2s; \}\
+        .day-card:active \{ transform: scale(0.98); \}\
+    </style>\
+</head>\
+<body class="max-w-md mx-auto shadow-2xl min-h-screen bg-slate-50">\
+\
+<div id="app" class="pb-24">\
+    <header class="glass-nav sticky top-0 z-50 px-6 py-4 flex justify-between items-center border-b border-gray-100">\
+        <div>\
+            <h1 class="text-xl font-bold text-slate-800">\uc0\u26085 \u26412 \u20908 \u20043 \u26053  \u10052 \u65039 </h1>\
+            <p class="text-xs text-slate-500">1/11 - 1/16 \uc0\u20185 \u21488  x \u21271 \u28023 \u36947 </p>\
+        </div>\
+        <button @click="showAddModal = true" class="bg-indigo-600 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg shadow-indigo-200">\
+            <i class="fas fa-plus"></i>\
+        </button>\
+    </header>\
+\
+    <div class="m-4 rounded-3xl overflow-hidden shadow-inner bg-slate-200 h-48 relative">\
+        <iframe \
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3204363.388478465!2d140.4077843!3d38.2906145!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5f8a28165b200001%3A0x69c2759e5170d4!2z5LuZ5Y-w6aeF!5e0!3m2!1szh-TW!2stw!4v1700000000000" \
+            class="w-full h-full border-0" allowfullscreen="" loading="lazy"></iframe>\
+        <div class="absolute bottom-2 right-2 bg-white/90 px-3 py-1 rounded-full text-[10px] font-bold text-slate-600 shadow-sm">\
+            Live Map\
+        </div>\
+    </div>\
+\
+    <main class="px-4 space-y-6">\
+        <div v-for="(day, date) in groupedItinerary" :key="date">\
+            <h2 class="text-sm font-black text-indigo-600 mb-3 px-2 uppercase tracking-widest">\{\{ date \}\}</h2>\
+            \
+            <div class="space-y-3">\
+                <div v-for="(item, index) in day" :key="index" \
+                    class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-start gap-4 relative group">\
+                    <div class="text-xs font-mono text-slate-400 pt-1 w-12">\{\{ item.time \}\}</div>\
+                    <div class="flex-1">\
+                        <h3 class="font-bold text-slate-800 text-sm">\{\{ item.title \}\}</h3>\
+                        <p class="text-xs text-slate-500 mt-1 flex items-center gap-1">\
+                            <i class="fas fa-location-dot text-indigo-300"></i> \{\{ item.location \}\}\
+                        </p>\
+                    </div>\
+                    <button @click="deleteItem(item.id)" class="text-slate-300 hover:text-red-400 p-2 transition-colors">\
+                        <i class="fas fa-trash-can text-sm"></i>\
+                    </button>\
+                </div>\
+            </div>\
+        </div>\
+    </main>\
+\
+    <div v-if="showAddModal" class="fixed inset-0 z-[60] flex items-end justify-center bg-black/40 backdrop-blur-sm">\
+        <div class="bg-white w-full max-w-md rounded-t-[32px] p-8 animate-slide-up shadow-2xl">\
+            <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-6"></div>\
+            <h2 class="text-xl font-bold mb-6">\uc0\u26032 \u22686 \u34892 \u31243 </h2>\
+            <div class="space-y-4">\
+                <input v-model="newItem.date" type="date" class="w-full p-4 bg-slate-50 rounded-2xl outline-none border border-transparent focus:border-indigo-500">\
+                <input v-model="newItem.time" type="time" class="w-full p-4 bg-slate-50 rounded-2xl outline-none border border-transparent focus:border-indigo-500">\
+                <input v-model="newItem.title" placeholder="\uc0\u34892 \u31243 \u21517 \u31281  (\u20363 \u22914 \u65306 \u21507 \u29275 \u33292 )" class="w-full p-4 bg-slate-50 rounded-2xl outline-none border border-transparent focus:border-indigo-500">\
+                <input v-model="newItem.location" placeholder="\uc0\u22320 \u40670 " class="w-full p-4 bg-slate-50 rounded-2xl outline-none border border-transparent focus:border-indigo-500">\
+                <div class="flex gap-3 pt-4">\
+                    <button @click="showAddModal = false" class="flex-1 py-4 text-slate-500 font-bold">\uc0\u21462 \u28040 </button>\
+                    <button @click="addItem" class="flex-[2] py-4 bg-indigo-600 text-white rounded-2xl font-bold shadow-lg shadow-indigo-100">\uc0\u20786 \u23384 \u34892 \u31243 </button>\
+                </div>\
+            </div>\
+        </div>\
+    </div>\
+\
+    <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto glass-nav border-t border-gray-100 flex justify-around py-3 safe-area-bottom">\
+        <button class="text-indigo-600 flex flex-col items-center gap-1">\
+            <i class="fas fa-calendar-alt text-xl"></i>\
+            <span class="text-[10px] font-bold">\uc0\u34892 \u31243 </span>\
+        </button>\
+        <button @click="openGoogleMaps" class="text-slate-400 flex flex-col items-center gap-1 hover:text-indigo-500">\
+            <i class="fas fa-map-marked-alt text-xl"></i>\
+            <span class="text-[10px] font-bold">\uc0\u22320 \u22294 </span>\
+        </button>\
+        <button class="text-slate-400 flex flex-col items-center gap-1">\
+            <i class="fas fa-suitcase-rolling text-xl"></i>\
+            <span class="text-[10px] font-bold">\uc0\u28310 \u20633 </span>\
+        </button>\
+    </nav>\
+</div>\
+\
+<script>\
+    const \{ createApp, ref, computed \} = Vue;\
+\
+    createApp(\{\
+        setup() \{\
+            const showAddModal = ref(false);\
+            const newItem = ref(\{ date: '', time: '', title: '', location: '' \});\
+            \
+            // \uc0\u38928 \u36617 \u24744 \u30340 \u34892 \u31243 \u36039 \u26009 \
+            const itinerary = ref([\
+                \{ id: 1, date: '2026-01-11', time: '02:55', title: '\uc0\u33322 \u29677 \u65306 \u21488 \u21271  TPE \u10132  \u20185 \u21488  SDJ', location: '\u26691 \u22290 \u22283 \u38555 \u27231 \u22580  T1' \},\
+                \{ id: 2, date: '2026-01-12', time: '13:02', title: 'JR \uc0\u20185 \u21488 \u31449  \u10132  \u22823 \u30707 \u30000 \u31449 ', location: '\u20185 \u21488 \u36554 \u31449 ' \},\
+                \{ id: 3, date: '2026-01-12', time: '15:30', title: '\uc0\u21476 \u23665 \u38307 \u25509 \u39361 \u36554  (\u20837 \u20303 )', location: '\u22823 \u30707 \u30000 \u31449 ' \},\
+                \{ id: 4, date: '2026-01-13', time: '16:35', title: '\uc0\u33322 \u29677 \u65306 \u20185 \u21488  SDJ \u10132  \u26413 \u24140  CTS', location: '\u20185 \u21488 \u27231 \u22580 ' \},\
+                \{ id: 5, date: '2026-01-14', time: '08:00', title: 'KKday\uc0\u65306 \u26093 \u23665 \u21205 \u29289 \u22290 /\u32654 \u29787 \u19968 \u26085 \u36938 ', location: '\u22823 \u36890 \u31449  31 \u34399 \u38272 ' \},\
+                \{ id: 6, date: '2026-01-15', time: '08:00', title: 'KKday\uc0\u65306 \u30331 \u21029 /\u27934 \u29242 \u28246 \u19968 \u26085 \u36938 ', location: '\u26413 \u24140 \u36554 \u31449 \u21271 \u21475 ' \},\
+                \{ id: 7, date: '2026-01-16', time: '18:40', title: '\uc0\u33322 \u29677 \u65306 \u26413 \u24140  CTS \u10132  \u21488 \u21271  TPE', location: '\u26032 \u21315 \u27506 \u27231 \u22580 ' \}\
+            ]);\
+\
+            const groupedItinerary = computed(() => \{\
+                const groups = \{\};\
+                // \uc0\u20808 \u26681 \u25818 \u26178 \u38291 \u25490 \u24207 \
+                const sorted = [...itinerary.value].sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));\
+                sorted.forEach(item => \{\
+                    if (!groups[item.date]) groups[item.date] = [];\
+                    groups[item.date].push(item);\
+                \});\
+                return groups;\
+            \});\
+\
+            const addItem = () => \{\
+                if (newItem.value.title && newItem.value.date) \{\
+                    itinerary.value.push(\{\
+                        ...newItem.value,\
+                        id: Date.now()\
+                    \});\
+                    showAddModal.value = false;\
+                    newItem.value = \{ date: '', time: '', title: '', location: '' \};\
+                \}\
+            \};\
+\
+            const deleteItem = (id) => \{\
+                itinerary.value = itinerary.value.filter(i => i.id !== id);\
+            \};\
+\
+            const openGoogleMaps = () => \{\
+                window.open('https://www.google.com/maps/dir/Sendai+Station/Ginzan+Onsen/Sapporo+Station', '_blank');\
+            \};\
+\
+            return \{ groupedItinerary, showAddModal, newItem, addItem, deleteItem, openGoogleMaps \};\
+        \}\
+    \}).mount('#app');\
+</script>\
+\
+<style>\
+    @keyframes slide-up \{\
+        from \{ transform: translateY(100%); \}\
+        to \{ transform: translateY(0); \}\
+    \}\
+    .animate-slide-up \{ animation: slide-up 0.3s ease-out; \}\
+</style>\
+\
+</body>\
+</html>}
